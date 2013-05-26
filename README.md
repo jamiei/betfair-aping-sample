@@ -11,7 +11,7 @@ $ lein jar
 
 Run in situ:
 
-$ lein run
+$ lein run *SESSION_ID* *APP_KEY*
 
 ## License 
 
