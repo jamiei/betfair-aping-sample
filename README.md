@@ -1,6 +1,6 @@
 # betfair-aping-sample
 
-A sample app showing basic requests to Betfair's API-NG service, you will need to supply your own AppKey and Session key.
+A sample app showing basic requests to Betfair's API-NG service, you will need to supply your own AppKey and Session key. This sample code was adapted from a Clojure client library for Betfair API-NG, which I will release in due course.
 
 ## Usage
 
