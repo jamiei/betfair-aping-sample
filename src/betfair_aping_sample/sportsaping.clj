@@ -6,22 +6,22 @@
 (def ^{:dynamic true} *authentication* "")
 (def ^{:dynamic true} *application* "")
 
-(defmacro with-session 
+(defmacro with-session
   "Applies the session-id header to requests executed within the body."
   [session-id & body]
   `(binding [*authentication* ~session-id]
   ~@body))
 
-(defmacro with-app-key 
+(defmacro with-app-key
   "Applies the app-key header to requests executed within the body."
   [app-key & body]
   `(binding [*application* ~app-key]
   ~@body))
 
-(defmacro with-session-and-app-key 
+(defmacro with-session-and-app-key
   "Applies the session and app-key headers to requests executed within the body."
   [session-id app-key & body]
-  `(with-session ~session-id 
+  `(with-session ~session-id
                  (with-app-key ~app-key ~@body)))
 
 ; msg-id atom - accessed via get-next-msg-id
@@ -35,8 +35,8 @@
     (into {} (filter (fn [v] (not (clojure.string/blank? (str (v 1))))) headers))))
 
 (defn- get-endpoint-from-prefix [method-prefix]
-  (let [default_endpoint "https://beta-api.betfair.com/json-rpc"
-        endpoints {:SportsAPING "https://beta-api.betfair.com/json-rpc"}
+  (let [default_endpoint "https://beta-api.betfair.com/betting/json-rpc"
+        endpoints {:SportsAPING "https://beta-api.betfair.com/betting/json-rpc"}
         endpoint ((keyword method-prefix) endpoints)]
         (or endpoint default_endpoint)))
 
@@ -45,7 +45,7 @@
 
 (defn- do-post-to-api-ng
   "Executes a clj-post request to the endpoint looked up  via method-prefix with the body and headers provided."
-  [method-prefix body headers] 
+  [method-prefix body headers]
       (def options  {:body body
                            :headers headers
                            :socket-timeout 2000  ;; in milliseconds
@@ -58,10 +58,10 @@
       (client/with-middleware (filter #(not (= client/wrap-lower-case-headers %)) client/default-middleware)
         (client/post (str (get-endpoint-from-prefix method-prefix)) options)))
 
-(defn do-json-rpc 
+(defn do-json-rpc
   "Calls the method provided with the parameters provided. Looks up the endpoint from the method-prefix
   and gets the auth and app-key headers."
-  [method params] 
+  [method params]
     (let [method-prefix (nth (clojure.string/split method #"/") 0)
           json-rpc-body (get-json-rpc-call-body method params (get-next-msg-id))
           headers (get-auth-headers)]
