@@ -35,8 +35,9 @@
     (into {} (filter (fn [v] (not (clojure.string/blank? (str (v 1))))) headers))))
 
 (defn- get-endpoint-from-prefix [method-prefix]
-  (let [default_endpoint "https://beta-api.betfair.com/betting/json-rpc"
-        endpoints {:SportsAPING "https://beta-api.betfair.com/betting/json-rpc"}
+  (let [default_endpoint "https://api.betfair.com/exchange/betting/json-rpc/v1"
+        endpoints {:SportsAPING "https://api.betfair.com/exchange/betting/json-rpc/v1"
+                   :AccountAPING "https://api.betfair.com/exchange/account/json-rpc/v1"}
         endpoint ((keyword method-prefix) endpoints)]
         (or endpoint default_endpoint)))
 
